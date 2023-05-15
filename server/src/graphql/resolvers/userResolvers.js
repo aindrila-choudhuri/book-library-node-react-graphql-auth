@@ -1,11 +1,11 @@
-const User = require('./../models/User');
-const { createAccessToken } = require('./../auth/create_token');
+const User = require('../../models/User');
+const { createAccessToken } = require('../../auth/create_token');
 const { v4: uuidv4 } = require('uuid');
 const { hash, compare } = require('bcryptjs');
 
 const users = [];
 
-const resolvers = {
+const userResolvers = {
   Query: {
     users: (parent, args, context) => {
       return users;
@@ -44,4 +44,4 @@ const resolvers = {
   },
 };
 
-module.exports = resolvers;
+module.exports = userResolvers;

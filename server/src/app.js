@@ -3,7 +3,7 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const authentication = require('./middleware/auth');
 const bodyParser = require('body-parser');
-const typeDefs = require('./graphql/typedef');
+const typeDefs = require('./graphql/typedefs');
 const resolvers = require('./graphql/resolvers');
 
 const server = new ApolloServer({
@@ -16,7 +16,10 @@ app.use(bodyParser.json());
 
 // auth middleware setup
 app.post('/graphql', (req, res, next) => {
-  if (req.body.operationName !== 'IntrospectionQuery' && req.body.query.match('users')) {
+  if (
+    req.body.operationName !== 'IntrospectionQuery' &&
+    (req.body.query.match('users') || req.body.query.match('books') || req.body.query.match('addBook'))
+  ) {
     authentication(req, res, next);
   } else {
     next();
