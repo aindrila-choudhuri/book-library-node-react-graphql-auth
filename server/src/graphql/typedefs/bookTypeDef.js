@@ -11,6 +11,7 @@ const bookTypeDef = gql`
 
   type Query {
     books: [Book]
+    book(id: ID!): Book
   }
 
   type Mutation {

@@ -15,15 +15,31 @@ const app = express();
 app.use(bodyParser.json());
 
 // auth middleware setup
+
 app.post('/graphql', (req, res, next) => {
-  if (
-    req.body.operationName !== 'IntrospectionQuery' &&
-    (req.body.query.match('users') || req.body.query.match('books') || req.body.query.match('addBook'))
-  ) {
-    authentication(req, res, next);
+  const authRoutes = ['users', 'books', 'addBook', 'book'];
+  if (req.body.operationName !== 'IntrospectionQuery') {
+    if (authRoutes.some((str) => req.body.query.includes(str))) {
+      console.log('-----matched----');
+      authentication(req, res, next);
+    } else {
+      next();
+    }
   } else {
     next();
   }
+
+  // if (
+  //   req.body.operationName !== 'IntrospectionQuery' &&
+  //   (req.body.query.match('users') ||
+  //     req.body.query.match('book') ||
+  //     req.body.query.match('books') ||
+  //     req.body.query.match('addBook'))
+  // ) {
+  //   authentication(req, res, next);
+  // } else {
+  //   next();
+  // }
 });
 
 async function startApolloServer() {
